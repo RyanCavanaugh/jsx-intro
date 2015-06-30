@@ -1,4 +1,21 @@
 
+# Caveat
+This walkthrough requires an as-of-yet unreleased version of the TypeScript compiler.
+To work from the latest TypeScript sources, you can do the following:
+
+ > `git clone https://github.com/Microsoft/TypeScript.git`
+
+ > `cd ./TypeScript`
+
+ > `npm install`
+
+ > `npm install -g jake`
+
+ > `jake local`
+
+Once these steps have completed, you can run `node built/local/tsc.js` to
+invoke the latest version of the TypeScript compiler.
+
 # Using TypeScript with JSX
 You can now use JSX syntax (https://facebook.github.io/jsx/) in TypeScript. JSX
 is a popular syntactic extension to JavaScript that lets you write blocks of expressions
@@ -16,9 +33,11 @@ and also use some useful tools to get our development set up.
 First, we'll need `react.js`. We can use bower (http://bower.io/) to install it
 to a local directory. jQuery is also useful, so let's install it as well.
 
- > `npm install -g bower`\
- > `bower install react` \
- > `bower install jquery`
+ > `npm install -g bower`
+
+ > `bower init` <- Accept defaults other than 'mark as private'
+
+ > `bower install react jquery --save`
 
 ## Our First HTML page
 Next, we need an HTML page. Since we're going to be doing most of our rendering
@@ -47,9 +66,14 @@ third-party libraries. The tsd tool (http://definitelytyped.org/tsd/) makes
 it easy to find and install .d.ts files. We'll create a config file with
 `tsd init` and then get the definition files for the two libraries we'll be using:
 
- > `npm install -g tsd`\
- > `tsd init`\
- > `tsd query react-jsx --save --action install`\
+ > `npm install -g tsd`
+
+ > `tsd init`
+
+ > `tsd query react-jsx --save --action install`
+
+ > `tsd query react --save --action install`
+
  > `tsd query jquery --save --action install`
 
 
@@ -86,13 +110,16 @@ Let's run the compiler in "watch" mode. This will monitor for changes, recompile
 and notify us of any errors. Once we start this, we won't need to explicitly invoke the compiler
 again. It's a fire-and-forget service.
 
- > `npm install -g typescript`\
+ > `npm install -g typescript`
+
  > `tsc -w`
 
 ## Developing Locally
 Now we have an app.js on disk and we can see our webpage. The `http-server` npm package
 provides a simple static HTTP server.
- > `npm install -g http-server`\
+ 
+ > `npm install -g http-server`
+
  > `http-server`
 
 Now we open a browser to `http://localhost:8080` and see our
@@ -132,7 +159,7 @@ component that displays a single repo.
 
 #### Definition
 ```ts
-interface RepoProps {
+interface RepoProps extends React.Props<any> {
 	name: string;
 	url: string;
 	description: string;
@@ -155,6 +182,7 @@ The class definition is simple - we consume the properties provided via `this.pr
 return a JSX element that will later be rendered into HTML.
 
 #### Consumption
+
 To consume the class, we just use it as part of a JSX tag:
 ```ts
 var content = <RepoDisplay
@@ -171,5 +199,21 @@ in the file automatically.
 
 ## Pulling Live Data
 
-https://api.github.com/users/microsoft/repos?sort=updated
+Let's get some live data from GitHub to show what it looks like to display a list
+of items. We'll use the list of repos under the Microsoft organization, which is
+available at https://api.github.com/users/microsoft/repos?sort=updated.
 
+```ts
+let settings = { url: 'https://api.github.com/users/microsoft/repos?sort=updated' };
+$.ajax(settings).then((data) => {
+	let content = <div>{data.map((entry, i) => <RepoDisplay key={i} {...entry} url={entry.html_url} />) }</div>;
+	let target = document.getElementById('output');
+	React.render(content, target);
+});
+```
+
+In this code, we get the data from the website, then display it in a div. Note that
+we need to provide a `key` property to React, and that we want to use the `html_url`
+field instead of the `url` field. Because the other property names the `RepoDisplay`
+component are the same as in the JSON data we get, we can spread in (`{...entry}`)
+the entry.

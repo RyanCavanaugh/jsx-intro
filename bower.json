@@ -1,0 +1,13 @@
+{
+  "name": "jsx-intro",
+  "version": "0.0.0",
+  "homepage": "https://github.com/RyanCavanaugh/jsx-intro",
+  "authors": [
+    "Ryan Cavanaugh <RyanCavanaugh@users.noreply.github.com>"
+  ],
+  "license": "Apache",
+  "dependencies": {
+    "react": "~0.13.3",
+    "jquery": "~2.1.4"
+  }
+}

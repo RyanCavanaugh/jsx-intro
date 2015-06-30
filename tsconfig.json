@@ -1,0 +1,6 @@
+{
+	"files": ["app.tsx", "typings/tsd.d.ts"],
+	"compilerOptions": {
+		"jsx": "react"
+	}
+}
