@@ -70,8 +70,6 @@ it easy to find and install .d.ts files. We'll create a config file with
 
  > `tsd init`
 
- > `tsd query react-jsx --save --action install`
-
  > `tsd query react --save --action install`
 
  > `tsd query jquery --save --action install`
