@@ -1,21 +1,3 @@
-
-# Caveat
-This walkthrough requires an as-of-yet unreleased version of the TypeScript compiler.
-To work from the latest TypeScript sources, you can do the following:
-
- > `git clone https://github.com/Microsoft/TypeScript.git`
-
- > `cd ./TypeScript`
-
- > `npm install`
-
- > `npm install -g jake`
-
- > `jake local`
-
-Once these steps have completed, you can run `node built/local/tsc.js` to
-invoke the latest version of the TypeScript compiler.
-
 # Using TypeScript with JSX
 You can now use JSX syntax (https://facebook.github.io/jsx/) in TypeScript. JSX
 is a popular syntactic extension to JavaScript that lets you write blocks of expressions
